@@ -50,7 +50,23 @@ class ErrorBoundary extends Component<{ children: ReactNode; onError?: () => voi
 function AppInner() {
   const [state, setState] = useState<AppState>({ view: 'landing' });
 
-  const handleNewProject = useCallback(() => {
+  const handleNewProject = useCallback(async () => {
+    // Try to pick a folder so data persists to disk from the start
+    if ('showDirectoryPicker' in window) {
+      try {
+        const handle = await window.showDirectoryPicker!({ mode: 'readwrite' });
+        const ds = createFileSystemDataSource(handle);
+        // Write empty project template to the chosen folder
+        for (const [path, content] of EMPTY_PROJECT_FILES) {
+          await ds.saveFile(path, content);
+        }
+        setState({ view: 'editor', ds, name: handle.name });
+        return;
+      } catch {
+        // User cancelled picker — fall through to memory mode
+      }
+    }
+    // Fallback: memory-only mode (no FileSystem Access API or user cancelled)
     const mem = createMemoryDataSource(EMPTY_PROJECT_FILES);
     setState({ view: 'editor', ds: mem.dataSource, name: 'Untitled', memoryHandle: mem });
   }, []);
