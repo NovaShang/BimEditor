@@ -1,6 +1,7 @@
 import type { DataSource } from 'bimdown-editor';
 
 const POLL_INTERVAL = 10_000;
+const SELF_WRITE_TTL = POLL_INTERVAL + 5_000;
 
 /** Recursively collect all files under a directory handle, returning relative paths. */
 async function collectFiles(
@@ -26,7 +27,6 @@ export function createFileSystemDataSource(
 ): DataSource {
   // Track last-modified timestamps for polling
   const selfWrites = new Map<string, number>();
-  const SELF_WRITE_TTL = 3000;
 
   return {
     async fetchText(path: string): Promise<string | null> {

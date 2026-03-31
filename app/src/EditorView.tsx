@@ -44,6 +44,9 @@ function EditorInner({ projectName }: { projectName: string }) {
     loadData();
 
     const disconnect = ds.watchChanges(async (path) => {
+      // Ignore non-project files (e.g. .DS_Store)
+      if (!path.endsWith('.csv') && !path.endsWith('.svg') && !path.endsWith('.json')) return;
+
       const parts = path.split('/');
       if (parts.length < 2) { loadData(); return; }
 
@@ -62,17 +65,14 @@ function EditorInner({ projectName }: { projectName: string }) {
 
       let tableName = '';
       if (fileName.endsWith('.csv')) tableName = fileName.slice(0, -4);
-      else if (fileName.endsWith('s.svg')) tableName = fileName.slice(0, -5);
+      else if (fileName.endsWith('.svg')) tableName = fileName.slice(0, -4);
 
       if (tableName) {
         const layer = await loadLayer(ds, levelId, tableName);
         if (layer && active) {
           dispatch({ type: 'UPDATE_LAYER', levelId, layer });
         }
-        return;
       }
-
-      loadData();
     });
 
     return () => {
