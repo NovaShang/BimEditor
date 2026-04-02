@@ -1,4 +1,5 @@
-import { useState, useCallback, Component  } from 'react';
+import { useState, useCallback, Component } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ReactNode, ErrorInfo } from 'react';
 import type { DataSource } from 'bimdown-editor';
 import { createLocalDataSource } from 'bimdown-editor';
@@ -7,6 +8,7 @@ import EditorView from './EditorView.tsx';
 import { createMemoryDataSource } from './dataSources/memory.ts';
 import type { MemoryDataSource } from './dataSources/memory.ts';
 import { createFileSystemDataSource } from './dataSources/fileSystem.ts';
+import { loadProjectFromZip } from './dataSources/zip.ts';
 import { EMPTY_PROJECT_FILES } from './templates/emptyProject.ts';
 import { ThemeProvider } from './theme.ts';
 
@@ -49,24 +51,9 @@ class ErrorBoundary extends Component<{ children: ReactNode; onError?: () => voi
 
 function AppInner() {
   const [state, setState] = useState<AppState>({ view: 'landing' });
+  const { t } = useTranslation();
 
-  const handleNewProject = useCallback(async () => {
-    // Try to pick a folder so data persists to disk from the start
-    if ('showDirectoryPicker' in window) {
-      try {
-        const handle = await window.showDirectoryPicker!({ mode: 'readwrite' });
-        const ds = createFileSystemDataSource(handle);
-        // Write empty project template to the chosen folder
-        for (const [path, content] of EMPTY_PROJECT_FILES) {
-          await ds.saveFile(path, content);
-        }
-        setState({ view: 'editor', ds, name: handle.name });
-        return;
-      } catch {
-        // User cancelled picker — fall through to memory mode
-      }
-    }
-    // Fallback: memory-only mode (no FileSystem Access API or user cancelled)
+  const handleNewProject = useCallback(() => {
     const mem = createMemoryDataSource(EMPTY_PROJECT_FILES);
     setState({ view: 'editor', ds: mem.dataSource, name: 'Untitled', memoryHandle: mem });
   }, []);
@@ -80,6 +67,37 @@ function AppInner() {
       // User cancelled
     }
   }, []);
+
+  const handleOpenZip = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.zip';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      const files = await loadProjectFromZip(file);
+      const name = file.name.replace(/\.zip$/i, '') || 'Untitled';
+      const mem = createMemoryDataSource(files);
+      setState({ view: 'editor', ds: mem.dataSource, name, memoryHandle: mem });
+    };
+    input.click();
+  }, []);
+
+  const handleOpenUrl = useCallback(async () => {
+    const url = window.prompt(t('landing.urlPrompt', 'Enter URL to a .zip file:'));
+    if (!url) return;
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const blob = await resp.blob();
+      const files = await loadProjectFromZip(blob);
+      const name = url.split('/').pop()?.replace(/\.zip$/i, '') || 'Remote Project';
+      const mem = createMemoryDataSource(files);
+      setState({ view: 'editor', ds: mem.dataSource, name, memoryHandle: mem });
+    } catch (e) {
+      window.alert(`${t('landing.urlError', 'Failed to load ZIP')}: ${(e as Error).message}`);
+    }
+  }, [t]);
 
   const handleOpenSample = useCallback(() => {
     const ds = createLocalDataSource('merged');
@@ -98,6 +116,8 @@ function AppInner() {
     return <LandingPage
       onNewProject={handleNewProject}
       onOpenFolder={handleOpenFolder}
+      onOpenZip={handleOpenZip}
+      onOpenUrl={handleOpenUrl}
       onOpenSample={import.meta.env.DEV ? handleOpenSample : undefined}
     />;
   }
