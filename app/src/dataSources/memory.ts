@@ -27,6 +27,14 @@ export function createMemoryDataSource(
       listeners.add(cb);
       return () => { listeners.delete(cb); };
     },
+
+    resolveUrl(path) {
+      // Memory data source stores text; for binary files, create a blob URL
+      const content = files.get(path);
+      if (!content) return '';
+      const blob = new Blob([content]);
+      return URL.createObjectURL(blob);
+    },
   };
 
   return {

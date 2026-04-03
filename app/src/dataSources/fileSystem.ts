@@ -57,6 +57,11 @@ export function createFileSystemDataSource(
       selfWrites.set(path, Date.now());
     },
 
+    resolveUrl(_path: string): string {
+      // FileSystem Access API doesn't provide direct URLs; callers should use fetchText + blob
+      return '';
+    },
+
     watchChanges(onFileChanged: (path: string) => void): () => void {
       let lastSnapshot = new Map<string, number>();
       let stopped = false;
