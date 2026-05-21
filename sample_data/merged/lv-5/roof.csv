@@ -1,4 +1,4 @@
-id,number,base_offset,material,roof_type,slope,thickness,mesh_file
-ro-3,,,composite,hip,15.352,0.1,
-ro-4,,,composite,hip,15.352,0.1,
-ro-5,,,composite,hip,15.352,0.1,
+id,number,material,roof_type,slope,thickness,mesh_file
+ro-3,,composite,hip,15.352,0.1,
+ro-4,,composite,hip,15.352,0.1,
+ro-5,,composite,hip,15.352,0.1,

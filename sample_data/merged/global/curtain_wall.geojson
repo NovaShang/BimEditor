@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"id":"cw-1"},"geometry":{"type":"LineString","coordinates":[[-9.797,-23.281],[-1.486,-23.281]]}},
+    {"type":"Feature","properties":{"id":"cw-2"},"geometry":{"type":"LineString","coordinates":[[-9.797,30.589],[-9.797,22.332]]}},
+    {"type":"Feature","properties":{"id":"cw-3"},"geometry":{"type":"LineString","coordinates":[[27.36,19.618],[27.36,22.339]]}},
+    {"type":"Feature","properties":{"id":"cw-4"},"geometry":{"type":"LineString","coordinates":[[56.47,-12.335],[7.245,-12.335]]}},
+    {"type":"Feature","properties":{"id":"cw-5"},"geometry":{"type":"LineString","coordinates":[[7.245,-12.335],[7.245,-6.684]]}},
+    {"type":"Feature","properties":{"id":"cw-6"},"geometry":{"type":"LineString","coordinates":[[7.245,19.618],[27.36,19.618]]}},
+    {"type":"Feature","properties":{"id":"cw-12"},"geometry":{"type":"LineString","coordinates":[[6.648,30.589],[-9.797,30.589]]}},
+    {"type":"Feature","properties":{"id":"cw-13"},"geometry":{"type":"LineString","coordinates":[[8.223,22.255],[-1.378,22.255]]}},
+    {"type":"Feature","properties":{"id":"cw-14"},"geometry":{"type":"LineString","coordinates":[[-9.797,2.33],[-9.797,-23.281]]}},
+    {"type":"Feature","properties":{"id":"cw-16"},"geometry":{"type":"LineString","coordinates":[[12.647,-23.281],[53.63,-23.281]]}},
+    {"type":"Feature","properties":{"id":"cw-18"},"geometry":{"type":"LineString","coordinates":[[56.47,-14.931],[56.47,-12.335]]}},
+    {"type":"Feature","properties":{"id":"cw-19"},"geometry":{"type":"LineString","coordinates":[[7.245,-6.684],[7.245,-0.689]]}},
+    {"type":"Feature","properties":{"id":"cw-20"},"geometry":{"type":"LineString","coordinates":[[7.245,-0.689],[7.245,9.911]]}},
+    {"type":"Feature","properties":{"id":"cw-21"},"geometry":{"type":"LineString","coordinates":[[7.245,9.911],[7.245,17.674]]}},
+    {"type":"Feature","properties":{"id":"cw-22"},"geometry":{"type":"LineString","coordinates":[[7.245,17.674],[7.245,19.618]]}},
+    {"type":"Feature","properties":{"id":"cw-32"},"geometry":{"type":"LineString","coordinates":[[53.63,-23.281],[56.521,-23.281]]}},
+    {"type":"Feature","properties":{"id":"cw-33"},"geometry":{"type":"LineString","coordinates":[[24.469,30.589],[27.36,30.589]]}}
+  ]
+}
