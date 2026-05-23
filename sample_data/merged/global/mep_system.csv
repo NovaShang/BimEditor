@@ -1,0 +1,4 @@
+id,system_type,name,color,discipline
+sys-hvac-main,hvac,Main HVAC Air,#3b82f6,hvac
+sys-chws-main,CHWS,Chilled Water Supply,#06b6d4,hvac
+sys-dhw-main,DHW,Domestic Hot Water,#dc2626,plumbing
