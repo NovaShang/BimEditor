@@ -1,0 +1,4 @@
+id,number,shape,size_x,size_y,system_type,start_node_id,end_node_id
+du-1,1,rect,0.3,0.2,SA,,
+du-2,2,rect,0.3,0.2,RA,,
+du-3,3,round,0.25,0.25,SA,,

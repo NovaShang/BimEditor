@@ -1,0 +1,8 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"id":"du-1"},"geometry":{"type":"LineString","coordinates":[[8,-10,3],[18,-10,3]]}},
+    {"type":"Feature","properties":{"id":"du-2"},"geometry":{"type":"LineString","coordinates":[[8,-11.2,3],[18,-11.2,3]]}},
+    {"type":"Feature","properties":{"id":"du-3"},"geometry":{"type":"LineString","coordinates":[[7.5,-10,0],[7.5,-10,3]]}}
+  ]
+}

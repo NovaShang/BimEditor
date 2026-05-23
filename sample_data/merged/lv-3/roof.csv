@@ -1,2 +1,2 @@
 id,number,mesh_file,material,roof_type,slope,thickness
-ro-2,,,composite,flat,0,0.4
+ro-2,,,composite,gable,20,0.4

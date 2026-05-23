@@ -1,0 +1,6 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"id":"eq-1","rotation":0},"geometry":{"type":"Point","coordinates":[7,-10.6,0]}}
+  ]
+}

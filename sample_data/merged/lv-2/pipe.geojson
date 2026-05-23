@@ -1,0 +1,7 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"id":"pi-1"},"geometry":{"type":"LineString","coordinates":[[8,-9.4,2.8],[18,-9.4,2.8]]}},
+    {"type":"Feature","properties":{"id":"pi-2"},"geometry":{"type":"LineString","coordinates":[[8,-9.1,2.8],[18,-9.1,2.8]]}}
+  ]
+}
