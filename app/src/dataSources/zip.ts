@@ -54,7 +54,7 @@ export async function loadProjectFromZip(blob: Blob): Promise<Map<string, string
     if (firstSlash > 0) {
       const prefix = paths[0]!.slice(0, firstSlash + 1);
       if (paths.every((p) => p.startsWith(prefix))) {
-        const stripped = new Map<string, string>();
+        const stripped = new Map<string, string | ArrayBuffer>();
         for (const [p, c] of files) {
           stripped.set(p.slice(prefix.length), c);
         }
