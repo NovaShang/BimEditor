@@ -2,7 +2,7 @@
 
 A browser-based 2D/3D building editor for the [BimDown](https://github.com/NovaShang/BimDown) format.
 
-Use it at [bimdown.com](https://bimdown.com) (with an AI agent and cloud projects) or standalone at [editor.bimdown.com](https://editor.bimdown.com).
+Use it at [bim.jouledown.com](https://bim.jouledown.com) (with an AI agent and cloud projects), or without an account at [bim.jouledown.com/editor](https://bim.jouledown.com/editor) (drafts stay in your browser). BimDown is part of [JouleDown](https://jouledown.com).
 
 ## Features
 
@@ -108,7 +108,7 @@ You can also implement `DataSource` yourself for custom backends (HTTP API, Inde
 ## Related Projects
 
 - **[BimDown](https://github.com/NovaShang/BimDown)**: the open-source format specification, CLI, agent skill, and Revit add-in
-- **[bimdown.com](https://bimdown.com)**: the hosted app built on this editor, with an AI agent that builds models from drawings, photos, or text
+- **[bim.jouledown.com](https://bim.jouledown.com)**: the hosted app built on this editor, with an AI agent that builds models from drawings, photos, or text
 
 ## License
 
