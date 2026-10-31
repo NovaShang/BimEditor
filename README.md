@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/bimdown-lockup-dark.png" />
+    <img src="docs/brand/bimdown-lockup-light.png" alt="BimDown" width="360" />
+  </picture>
+</p>
+
 # BimDown Editor
 
 A browser-based 2D/3D building editor for the [BimDown](https://github.com/NovaShang/BimDown) format.
