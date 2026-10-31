@@ -1,6 +1,8 @@
 # BimDown Editor
 
-A browser-based 2D/3D building editor for the [BimDown](https://github.com/NovaShang/bimdown-spec) format.
+A browser-based 2D/3D building editor for the [BimDown](https://github.com/NovaShang/BimDown) format.
+
+Use it at [bimdown.com](https://bimdown.com) (with an AI agent and cloud projects) or standalone at [editor.bimdown.com](https://editor.bimdown.com).
 
 ## Features
 
@@ -15,8 +17,8 @@ A browser-based 2D/3D building editor for the [BimDown](https://github.com/NovaS
 The standalone app lives in `app/`. To run it:
 
 ```bash
-git clone https://github.com/NovaShang/bimdown-editor.git
-cd bimdown-editor
+git clone https://github.com/NovaShang/BimEditor.git
+cd BimEditor
 npm install
 npm run dev --workspace=app
 ```
@@ -105,8 +107,8 @@ You can also implement `DataSource` yourself for custom backends (HTTP API, Inde
 
 ## Related Projects
 
-- **[bimdown-spec](https://github.com/NovaShang/bimdown-spec)** — the open-source BimDown format specification, CLI tools, and Revit add-in
-- **[BimClaw](https://bimclaw.com)** — SaaS platform with AI agent, real-time collaboration, and building analysis
+- **[BimDown](https://github.com/NovaShang/BimDown)**: the open-source format specification, CLI, agent skill, and Revit add-in
+- **[bimdown.com](https://bimdown.com)**: the hosted app built on this editor, with an AI agent that builds models from drawings, photos, or text
 
 ## License
 
