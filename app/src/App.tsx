@@ -3,12 +3,15 @@ import { useTranslation } from 'react-i18next';
 import type { ReactNode, ErrorInfo } from 'react';
 import type { DataSource } from 'bimdown-editor';
 import { createLocalDataSource } from 'bimdown-editor';
+import {
+  createMemoryDataSource,
+  createFileSystemDataSource,
+  loadProjectFromZip,
+  pickDirectory,
+} from 'bimdown-editor/data-sources';
+import type { MemoryDataSource } from 'bimdown-editor/data-sources';
 import LandingPage from './LandingPage.tsx';
 import EditorView from './EditorView.tsx';
-import { createMemoryDataSource } from './dataSources/memory.ts';
-import type { MemoryDataSource } from './dataSources/memory.ts';
-import { createFileSystemDataSource } from './dataSources/fileSystem.ts';
-import { loadProjectFromZip } from './dataSources/zip.ts';
 import { EMPTY_PROJECT_FILES } from './templates/emptyProject.ts';
 import { ThemeProvider } from './theme.ts';
 
@@ -60,7 +63,7 @@ function AppInner() {
 
   const handleOpenFolder = useCallback(async () => {
     try {
-      const handle = await window.showDirectoryPicker!({ mode: 'readwrite' });
+      const handle = await pickDirectory();
       const ds = createFileSystemDataSource(handle);
       setState({ view: 'editor', ds, name: handle.name });
     } catch {

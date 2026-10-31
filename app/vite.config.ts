@@ -113,6 +113,7 @@ export default defineConfig({
       'bimdown-editor/style.css': path.resolve(__dirname, '../editor/src/editor.css'),
       'bimdown-editor/src/i18n/en.json': path.resolve(__dirname, '../editor/src/i18n/en.json'),
       'bimdown-editor/src/i18n/zh.json': path.resolve(__dirname, '../editor/src/i18n/zh.json'),
+      'bimdown-editor/data-sources': path.resolve(__dirname, '../editor/src/dataSources/index.ts'),
       'bimdown-editor': path.resolve(__dirname, '../editor/src/exports.ts'),
       '@': path.resolve(__dirname, './src'),
     },

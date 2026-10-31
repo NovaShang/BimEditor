@@ -1,8 +1,9 @@
 import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
+import type { ProjectFileMap } from './memory.ts';
 
+/** Download a project as `<projectName>.zip`. */
 export async function downloadProjectAsZip(
-  files: Map<string, string | ArrayBuffer>,
+  files: ProjectFileMap,
   projectName = 'bimdown-project',
 ): Promise<void> {
   const zip = new JSZip();
@@ -10,20 +11,31 @@ export async function downloadProjectAsZip(
     zip.file(path, content);
   }
   const blob = await zip.generateAsync({ type: 'blob' });
-  saveAs(blob, `${projectName}.zip`);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${projectName}.zip`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }
 
 /** File extensions that must be read as binary (ArrayBuffer) instead of text. */
-const BINARY_EXTENSIONS = new Set(['.glb', '.gltf', '.obj', '.bin', '.png', '.jpg', '.jpeg', '.webp']);
+const BINARY_EXTENSIONS = new Set(['.glb', '.gltf', '.obj', '.bin', '.png', '.jpg', '.jpeg', '.webp', '.ktx2']);
 
-function isBinaryFile(path: string): boolean {
+export function isBinaryFile(path: string): boolean {
   const ext = path.slice(path.lastIndexOf('.')).toLowerCase();
   return BINARY_EXTENSIONS.has(ext);
 }
 
-export async function loadProjectFromZip(blob: Blob): Promise<Map<string, string | ArrayBuffer>> {
+/**
+ * Unpack a BimDown project zip: text files as strings, meshes/images as
+ * ArrayBuffers. Skips macOS metadata and strips a single wrapping root folder.
+ */
+export async function loadProjectFromZip(blob: Blob): Promise<ProjectFileMap> {
   const zip = await JSZip.loadAsync(blob);
-  const files = new Map<string, string | ArrayBuffer>();
+  const files: ProjectFileMap = new Map();
   const promises: Promise<void>[] = [];
 
   zip.forEach((relativePath, entry) => {
@@ -54,7 +66,7 @@ export async function loadProjectFromZip(blob: Blob): Promise<Map<string, string
     if (firstSlash > 0) {
       const prefix = paths[0]!.slice(0, firstSlash + 1);
       if (paths.every((p) => p.startsWith(prefix))) {
-        const stripped = new Map<string, string | ArrayBuffer>();
+        const stripped: ProjectFileMap = new Map();
         for (const [p, c] of files) {
           stripped.set(p.slice(prefix.length), c);
         }

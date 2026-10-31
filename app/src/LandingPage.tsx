@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilePlus, FolderOpen, FileArchive, Globe, FileBox } from 'lucide-react';
+import { canPickDirectory } from 'bimdown-editor/data-sources';
 import { setLanguage } from './i18n.ts';
 
 interface LandingPageProps {
@@ -13,7 +14,7 @@ interface LandingPageProps {
 
 export default function LandingPage({ onNewProject, onOpenFolder, onOpenZip, onOpenUrl, onOpenSample }: LandingPageProps) {
   const { t, i18n } = useTranslation();
-  const hasFs = 'showDirectoryPicker' in window;
+  const hasFs = canPickDirectory();
 
   const handleToggleLang = useCallback(() => {
     const next = i18n.language === 'zh' ? 'en' : 'zh';

@@ -1,17 +1,21 @@
-import type { DataSource } from 'bimdown-editor';
+import type { DataSource } from '../utils/dataSource.ts';
 import { createFileSystemDataSource } from './fileSystem.ts';
+
+export type ProjectFileMap = Map<string, string | ArrayBuffer>;
 
 export interface MemoryDataSource {
   dataSource: DataSource;
-  getFiles(): Map<string, string | ArrayBuffer>;
+  getFiles(): ProjectFileMap;
+  /** Write every text file into a local folder and return a DataSource on it. */
   transitionToFs(handle: FileSystemDirectoryHandle): Promise<DataSource>;
 }
 
-export function createMemoryDataSource(
-  initialFiles?: Map<string, string | ArrayBuffer>,
-): MemoryDataSource {
-  const files = new Map<string, string | ArrayBuffer>(initialFiles ?? []);
-  const listeners = new Set<(path: string) => void>();
+/**
+ * An in-memory project (e.g. opened from a .zip). Nothing is persisted:
+ * edits live until the page is closed.
+ */
+export function createMemoryDataSource(initialFiles?: ProjectFileMap): MemoryDataSource {
+  const files: ProjectFileMap = new Map(initialFiles ?? []);
 
   const dataSource: DataSource = {
     async fetchText(path) {
@@ -22,14 +26,17 @@ export function createMemoryDataSource(
       return new TextDecoder().decode(content);
     },
 
-    async saveFile(path, content) {
-      files.set(path, content);
-      for (const cb of listeners) cb(path);
+    async listFiles() {
+      return [...files.keys()];
     },
 
-    watchChanges(cb) {
-      listeners.add(cb);
-      return () => { listeners.delete(cb); };
+    async saveFile(path, content) {
+      files.set(path, content);
+    },
+
+    // The editor is the only writer; its own saves are already in its state.
+    watchChanges() {
+      return () => {};
     },
 
     async resolveUrl(path) {

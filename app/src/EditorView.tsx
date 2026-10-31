@@ -1,21 +1,21 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   EditorProvider,
-  useEditorDispatch,
   DataSourceProvider,
-  useDataSource,
-  loadProject,
-  loadGrids,
-  loadLayer,
+  useLiveProject,
   EditorShell,
   TooltipProvider,
 } from 'bimdown-editor';
 import type { DataSource } from 'bimdown-editor';
+import {
+  canPickDirectory,
+  createFileSystemDataSource,
+  downloadProjectAsZip,
+  pickDirectory,
+} from 'bimdown-editor/data-sources';
+import type { MemoryDataSource } from 'bimdown-editor/data-sources';
 import { ArrowLeft, Download, FolderOpen, Sun, Moon } from 'lucide-react';
-import type { MemoryDataSource } from './dataSources/memory.ts';
-import { downloadProjectAsZip } from './dataSources/zip.ts';
-import { createFileSystemDataSource } from './dataSources/fileSystem.ts';
 import { setLanguage } from './i18n.ts';
 import { useTheme } from './theme.ts';
 
@@ -28,59 +28,7 @@ interface EditorViewProps {
 }
 
 function EditorInner({ projectName }: { projectName: string }) {
-  const dispatch = useEditorDispatch();
-  const ds = useDataSource();
-
-  useEffect(() => {
-    let active = true;
-
-    const loadData = async () => {
-      const [project, grids] = await Promise.all([loadProject(ds), loadGrids(ds)]);
-      if (active) {
-        dispatch({ type: 'SET_PROJECT', model: projectName, project, grids });
-      }
-    };
-
-    loadData();
-
-    const disconnect = ds.watchChanges(async (path) => {
-      // Ignore non-project files (e.g. .DS_Store)
-      if (!path.endsWith('.csv') && !path.endsWith('.svg') && !path.endsWith('.json')) return;
-
-      const parts = path.split('/');
-      if (parts.length < 2) { loadData(); return; }
-
-      const levelId = parts[0]!;
-      const fileName = parts.slice(1).join('/');
-
-      if (levelId === 'global' && fileName === 'level.csv') {
-        loadData();
-        return;
-      }
-      if (levelId === 'global' && fileName === 'grid.csv') {
-        const grids = await loadGrids(ds);
-        if (active) dispatch({ type: 'UPDATE_GRIDS', grids });
-        return;
-      }
-
-      let tableName = '';
-      if (fileName.endsWith('.csv')) tableName = fileName.slice(0, -4);
-      else if (fileName.endsWith('.svg')) tableName = fileName.slice(0, -4);
-
-      if (tableName) {
-        const layer = await loadLayer(ds, levelId, tableName);
-        if (layer && active) {
-          dispatch({ type: 'UPDATE_LAYER', levelId, layer });
-        }
-      }
-    });
-
-    return () => {
-      active = false;
-      disconnect();
-    };
-  }, [dispatch, ds, projectName]);
-
+  useLiveProject(projectName);
   return <EditorShell />;
 }
 
@@ -95,9 +43,9 @@ export default function EditorView({ ds, projectName, memoryHandle, onBack, onDa
   }, [memoryHandle, projectName]);
 
   const handleSaveToFolder = useCallback(async () => {
-    if (!('showDirectoryPicker' in window)) return;
+    if (!canPickDirectory()) return;
     try {
-      const handle = await window.showDirectoryPicker!({ mode: 'readwrite' });
+      const handle = await pickDirectory();
       if (memoryHandle) {
         const fsDs = await memoryHandle.transitionToFs(handle);
         onDataSourceChange?.(fsDs);
@@ -150,7 +98,7 @@ export default function EditorView({ ds, projectName, memoryHandle, onBack, onDa
             <span>ZIP</span>
           </button>
         )}
-        {'showDirectoryPicker' in window && (
+        {canPickDirectory() && (
           <button
             onClick={handleSaveToFolder}
             className="glass-panel flex h-9 items-center gap-1.5 rounded-xl border border-[var(--panel-border)] px-3 shadow-[var(--shadow-panel)] text-[var(--text-dim)] hover:text-[var(--text-bright)] text-[12px] transition-colors"
